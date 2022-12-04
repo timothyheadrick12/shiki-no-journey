@@ -2,10 +2,11 @@ import { animate, delay, motion, Variant } from "framer-motion";
 import { useState } from "react";
 import menuGlitchImage from "./assets/menuglitch.png";
 import menuGlitchGif from "./assets/glitchmenu.gif";
+import { ReactComponent as Close } from "./assets/close.svg";
 import { useIsMd } from "./hooks/utils";
 
 export const GlitchDiv = () => {
-  const [animateState, setAnimateState] = useState("initial");
+  const [animateState, setAnimateState] = useState("closed");
   const isMedium = useIsMd();
   const positions = [
     { x: 0, y: 0 },
@@ -101,11 +102,11 @@ export const GlitchDiv = () => {
 
   const childVariant = isMedium
     ? {
-        initial: {
+        closed: {
           opacity: 0,
           transition: { duration: 0.1 },
         },
-        hover: ({ x, y, delayMul, blink }: any) => ({
+        opened: ({ x, y, delayMul, blink }: any) => ({
           translateX: `${3.5 * x}rem`,
           translateY: `${3.5 * y}rem`,
           opacity: 1,
@@ -124,11 +125,11 @@ export const GlitchDiv = () => {
         }),
       }
     : {
-        initial: {
+        closed: {
           opacity: 0,
           transition: { duration: 0.1 },
         },
-        hover: ({ x, y, delayMul, blink }: any) => ({
+        opened: ({ x, y, delayMul, blink }: any) => ({
           translateX: `${20 * x}vw`,
           translateY: `${20 * y}vw`,
           opacity: 1,
@@ -149,29 +150,47 @@ export const GlitchDiv = () => {
 
   const parentVariant = isMedium
     ? {
-        initial: {
+        closed: {
           width: "2rem",
           height: "2rem",
           transition: { type: "linear" },
         },
-        hover: {
+        opened: {
           width: "17.5rem",
           height: "100vh",
           transition: { duration: 0 },
         },
       }
     : {
-        initial: {
+        closed: {
           width: "2rem",
           height: "2rem",
           transition: { type: "linear" },
         },
-        hover: {
+        opened: {
           width: "100vw",
           height: "100vh",
           transition: { duration: 0 },
         },
       };
+
+  const closeVariant = {
+    closed: {
+      opacity: 0,
+      pathLength: 0,
+      strokeWidth: 0,
+    },
+    opened: {
+      opacity: 1,
+      pathLength: 1,
+      strokeWidth: 1,
+      transition: {
+        opacity: { duration: 0, delay: 0.64 },
+        pathLength: { delay: 0.64, duration: 0.5, ease: "easeInOut" },
+        fill: { delay: 1.14 },
+      },
+    },
+  };
 
   return (
     <motion.div
@@ -190,16 +209,36 @@ export const GlitchDiv = () => {
       <motion.div className="absolute left-0 top-0 w-8 h-8 cursor-pointer">
         <img
           className="absolute left-0 top-0 w-8 h-8 cursor-pointer"
-          src={animateState == "initial" ? menuGlitchImage : menuGlitchGif}
+          src={animateState == "closed" ? menuGlitchImage : menuGlitchGif}
         />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="stroke-white"
+          width="100%"
+          viewBox="0 0 48 48"
+        >
+          <motion.path
+            variants={closeVariant}
+            d="m12.45 37.65-2.1-2.1L21.9 24 10.35 12.45l2.1-2.1L24 21.9l11.55-11.55 2.1 2.1L26.1 24l11.55 11.55-2.1 2.1L24 26.1Z"
+          />
+        </svg>
         <button
           className="absolute left-0 top-0 w-8 h-8 cursor-pointer"
           onClick={() => {
-            setAnimateState(animateState == "initial" ? "hover" : "initial");
+            setAnimateState(animateState == "closed" ? "opened" : "closed");
             console.log(animateState);
           }}
         />
       </motion.div>
+      <button className="relative mt-20 m-4 bg-black/50 w-4/6 border-solid border-white border-2">
+        Hello Dog
+      </button>
+      <button className="relative m-4 bg-black/50 w-4/6 border-solid border-white border-2">
+        Hello Dog
+      </button>
+      <button className="relative m-4 bg-black/50 w-4/6 border-solid border-white border-2">
+        Hello Dog
+      </button>
     </motion.div>
   );
 };
