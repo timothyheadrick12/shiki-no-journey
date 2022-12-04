@@ -100,13 +100,13 @@ export const GlitchDiv = () => {
     { x: 1, y: 15 },
   ];
 
-  const childVariant = isMedium
+  const boxVariant = isMedium
     ? {
         closed: {
           opacity: 0,
           transition: { duration: 0.1 },
         },
-        opened: ({ x, y, delayMul, blink }: any) => ({
+        opened: ({ x, y, delayMul }: any) => ({
           translateX: `${3.5 * x}rem`,
           translateY: `${3.5 * y}rem`,
           opacity: 1,
@@ -148,7 +148,7 @@ export const GlitchDiv = () => {
         }),
       };
 
-  const parentVariant = isMedium
+  const rootVariant = isMedium
     ? {
         closed: {
           width: "2rem",
@@ -158,7 +158,9 @@ export const GlitchDiv = () => {
         opened: {
           width: "17.5rem",
           height: "100vh",
-          transition: { duration: 0 },
+          transition: {
+            duration: 0,
+          },
         },
       }
     : {
@@ -170,7 +172,9 @@ export const GlitchDiv = () => {
         opened: {
           width: "100vw",
           height: "100vh",
-          transition: { duration: 0 },
+          transition: {
+            duration: 0,
+          },
         },
       };
 
@@ -192,20 +196,64 @@ export const GlitchDiv = () => {
     },
   };
 
+  const itemParentVariant = {
+    opened: {
+      transition: {
+        delayChildren: 0.8,
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariant = {
+    closed: {
+      opacity: 0,
+      transition: {
+        duration: 0,
+      },
+    },
+    opened: {
+      opacity: 1,
+    },
+  };
+
   return (
     <motion.div
       className="absolute left-0 top-0 w-8 h-8 overflow-hidden"
       animate={animateState}
-      variants={parentVariant}
+      variants={rootVariant}
     >
       {positions.map(({ x, y }, i) => (
         <motion.div
           className="absolute w-[21vw] sm:w-14 aspect-square top-0 left-0 bg-black opacity-0"
-          variants={childVariant}
+          variants={boxVariant}
           key={i}
           custom={{ x: x, y: y, delayMul: i }}
         />
       ))}
+      <motion.div
+        className="relative w-full h-full"
+        variants={itemParentVariant}
+      >
+        <motion.button
+          variants={itemVariant}
+          className="mt-20 m-4 bg-black/10 hover:bg-gray-300/10 w-4/6 border-solid border-white border-2"
+        >
+          Hello Dog
+        </motion.button>
+        <motion.button
+          variants={itemVariant}
+          className="m-4 bg-black/10 hover:bg-gray-300/10 w-4/6 border-solid border-white border-2"
+        >
+          Hello Dog
+        </motion.button>
+        <motion.button
+          variants={itemVariant}
+          className="m-4 bg-black/10 hover:bg-gray-300/10 w-4/6 border-solid border-white border-2"
+        >
+          Hello Dog
+        </motion.button>
+      </motion.div>
       <motion.div className="absolute left-0 top-0 w-8 h-8 cursor-pointer">
         <img
           className="absolute left-0 top-0 w-8 h-8 cursor-pointer"
@@ -230,15 +278,6 @@ export const GlitchDiv = () => {
           }}
         />
       </motion.div>
-      <button className="relative mt-20 m-4 bg-black/50 w-4/6 border-solid border-white border-2">
-        Hello Dog
-      </button>
-      <button className="relative m-4 bg-black/50 w-4/6 border-solid border-white border-2">
-        Hello Dog
-      </button>
-      <button className="relative m-4 bg-black/50 w-4/6 border-solid border-white border-2">
-        Hello Dog
-      </button>
     </motion.div>
   );
 };
