@@ -232,7 +232,7 @@ export const GlitchDiv = () => {
         />
       ))}
       <motion.div
-        className="relative w-full h-full"
+        className="relative w-full h-full overflow-hidden"
         variants={itemParentVariant}
       >
         <motion.button
